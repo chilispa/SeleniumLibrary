@@ -75,6 +75,18 @@ Set Window Size using strings
     Should Be Equal    ${width}    ${600}
     Should Be Equal    ${height}    ${800}
 
+Get and Set Inner Window Size
+    Set Inner Window Size    ${800}    ${600}
+    ${width}    ${height}=    Get Inner Window Size
+    Should Be Equal    ${width}    ${800}
+    Should Be Equal    ${height}    ${600}
+
+Set Inner Window Size using strings
+    Set Inner Window Size    800    600
+    ${width}    ${height}=    Get Inner Window Size
+    Should Be Equal    ${width}    ${800}
+    Should Be Equal    ${height}    ${600}
+
 Get and Set Window Position
     [Tags]  Known Issue Chrome    Known Issue Safari
     Set Window Position    ${300}    ${200}

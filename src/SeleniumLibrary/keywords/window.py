@@ -189,6 +189,51 @@ class WindowKeywords(LibraryComponent):
         return self.driver.set_window_size(int(width), int(height))
 
     @keyword
+    def get_inner_window_size(self):
+        """Returns current inner window width and height as integers.
+
+        See also `Set Inner Window Size`.
+
+        Example:
+        | ${width} | ${height}= | `Get Inner Window Size` |
+
+        The main difference with `Get Window Size` is that you receive
+        the inner size, excluding the browser bars, borders and so on.
+        """
+        inner_width = int(self.driver.execute_script("return window.innerWidth;"))
+        inner_height = int(self.driver.execute_script("return window.innerHeight;"))
+
+        return inner_width, inner_height
+
+    @keyword
+    def set_inner_window_size(self, width, height):
+        """Sets current windows size adapted to contain page
+        with given ``width`` and ``height``.
+
+        The main difference with `Set Window Size` is that you can give
+        the inner size required, excluding the browser bars, borders and so on.
+        The window size is adapted to provide the correct page size for each browser.
+
+        Values can be given using strings containing numbers or by using
+        actual numbers. See also `Get Window Size` and `Set Window Size` .
+
+        Browsers have a limit how small they can be set. Trying to set them
+        smaller will cause the actual size to be bigger than the requested
+        size.
+
+        Example:
+        | `Set Inner Window Size` | 800 | 600 |
+        """
+        self.driver.set_window_size(int(width), int(height))
+        inner_width = self.driver.execute_script("return window.innerWidth;")
+        inner_height = self.driver.execute_script("return window.innerHeight;")
+        width_offset = int(width) - int(inner_width)
+        height_offset = int(height) - int(inner_height)
+        window_width = int(width) + int(width_offset)
+        window_height = int(height) + int(height_offset)
+        return self.driver.set_window_size(int(window_width), int(window_height))
+
+    @keyword
     def get_window_position(self):
         """Returns current window position.
 
