@@ -54,6 +54,14 @@ class WaitingKeywords(LibraryComponent):
         )
 
     @keyword
+    def wait_until_location_is_not(self, expected, timeout=None, message=None):
+        pass
+
+    @keyword
+    def wait_until_location_does_not_contain(self, expected, timeout=None, message=None):
+        pass
+
+    @keyword
     def wait_until_location_is(self, expected, timeout=None, message=None):
         """Waits until the current URL is ``expected``.
 
