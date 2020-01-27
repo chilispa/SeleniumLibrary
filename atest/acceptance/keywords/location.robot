@@ -87,3 +87,13 @@ Wait Until Location Is Fails With Timeout
     Run Keyword And Expect Error
     ...     my_message
     ...     Wait Until Location Is     not_here   timeout=0.1     message=my_message
+
+Wait Until Location Is Not
+    [Setup]    Go To Page "javascript/wait_location.html"
+    Click Element   button
+    Wait Until Location Is Not     http://localhost:7000/html/notMe
+
+Wait Until Location Does Not Contain
+    [Setup]    Go To Page "javascript/wait_location.html"
+    Click Element   button
+    Wait Until Location Does Not Contain     not_contained
