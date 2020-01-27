@@ -149,7 +149,7 @@ Wait Until Location Does Not Contain Fail At The End
     ${orig_timeout}=    Set Selenium Timeout    2 s
     run keyword and expect error
     ...    Location did contain '.html' in 2 seconds.
-    ...    Wait Until Location Does Not Contain    html
+    ...    Wait Until Location Does Not Contain    .html
 
 Wait Until Location Does Not Contain Fail With Timeout
     [Setup]    Go To Page "javascript/wait_location.html"
