@@ -143,6 +143,7 @@ Wait Until Location Does Not Contain Fail As Number
     run keyword and expect error
     ...    Location did contain '${7000}' in 2 seconds.
     ...    Wait Until Location Does Not Contain   ${7000}
+    Set Selenium Timeout    ${orig_timeout}
 
 Wait Until Location Does Not Contain Fail At The End
     [Setup]    Go To Page "javascript/wait_location.html"
@@ -150,6 +151,7 @@ Wait Until Location Does Not Contain Fail At The End
     run keyword and expect error
     ...    Location did contain '.html' in 2 seconds.
     ...    Wait Until Location Does Not Contain    .html
+    Set Selenium Timeout    ${orig_timeout}
 
 Wait Until Location Does Not Contain Fail With Timeout
     [Setup]    Go To Page "javascript/wait_location.html"
