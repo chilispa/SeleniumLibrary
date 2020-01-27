@@ -16,15 +16,6 @@ Get Cookies As Dict
     ${expected_cookies}=    Create Dictionary   test=seleniumlibrary    another=value
     Dictionaries Should Be Equal  ${expected_cookies}   ${cookies}
 
-Get Cookie Value Set By Selenium
-    ${value} =    Get Cookie Value    another
-    Should Be Equal    ${value}       value
-
-Get Cookie Value Set By App
-    Click Link    Add cookie
-    ${cookie}=    Get Cookie Value    spam
-    Should Be Equal    ${cookie}      eggs
-
 App Sees Cookie Set By Selenium
     Add Cookie    setbyselenium    true
     Click Link    Check cookie
@@ -113,6 +104,7 @@ Test Get Cookie Object Value
     Should Be Equal    ${cookie.value}        value
 
 Test Get Cookie Keyword Logging
+    [Tags]    NoGrid
     [Documentation]
     ...    LOG 2:4 ${cookie} = name=another
     ...    value=value

@@ -8,7 +8,7 @@ Before running the test, install the dependencies::
 
 Unit Tests
 ----------
-Units tests are written by using the Python default `unittest`_ framework.
+Units tests are written by using the `pytest`_  framework.
 Unit test can be executed by running::
 
     python utest/run.py
@@ -32,8 +32,15 @@ must handled with `try/except ImportError:` and skipped with:
 `@unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')`. The `JYTHON` is
 imported from `from robot.utils import JYTHON`
 
+Another downside of ApprovalTests is that SeleniumLibrary is mainly developed
+in Linux and therefore unit tests using ApprovalTests are skipped in Windows
+OS. This needs to be done until ApprovalTests issue `#41`_ is fixed.
+To skip tests, mark test as:
+`@unittest.skipIf(WINDOWS, reason='ApprovalTest do not support different line feeds')`
 
-.. _unittest: https://docs.python.org/3/library/unittest.html
+
+.. _pytest: https://docs.pytest.org/en/latest/
 .. _ApprovalTests: https://github.com/approvals/ApprovalTests.Python
 .. _ApprovalTests blog post: http://blog.approvaltests.com/
 .. _Jython: http://www.jython.org/
+.. _#41: https://github.com/approvals/ApprovalTests.Python/issues/41

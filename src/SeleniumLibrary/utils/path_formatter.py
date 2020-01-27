@@ -13,12 +13,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from SeleniumLibrary.base.robotlibcore import PY2
 
-from collections import namedtuple
 
-import selenium
+# Cab be deleted when Python 2 is not anymore supported.
+def _format_path(file_path, index):
+    if PY2:
+        import string
+        return string.Formatter().vformat(file_path, (), _SafeFormatter(index=index))
+    return file_path.format_map(_SafeFormatter(index=index))
 
-SeleniumVersion = namedtuple('SeleniumVersion', 'major minor micro')
-major, minor, micro = (selenium.__version__.split('.') + ['0', '0'])[:3]
-major, minor, micro = int(major), int(minor), int(micro)
-SELENIUM_VERSION = SeleniumVersion(major=major, minor=minor, micro=micro)
+
+class _SafeFormatter(dict):
+
+    def __missing__(self, key):
+        return '{%s}' % key

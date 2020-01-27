@@ -33,7 +33,7 @@ class CookieKeywords(LibraryComponent):
 
     @keyword
     def delete_cookie(self, name):
-        """Deletes cookie matching ``name``.
+        """Deletes the cookie matching ``name``.
 
         If the cookie is not found, nothing happens.
         """
@@ -43,16 +43,16 @@ class CookieKeywords(LibraryComponent):
     def get_cookies(self, as_dict=False):
         """Returns all cookies of the current page.
 
-        If ``as_dict`` argument evaluates as false, see `Boolean arguments` 
-        for more details, then cookie information is returned as 
+        If ``as_dict`` argument evaluates as false, see `Boolean arguments`
+        for more details, then cookie information is returned as
         a single string in format ``name1=value1; name2=value2; name3=value3``.
         When ``as_dict`` argument evaluates as true, cookie information
-        is returned as Robot Framework dictionary format. The string format 
+        is returned as Robot Framework dictionary format. The string format
         can be used, for example, for logging purposes or in headers when
         sending HTTP requests. The dictionary format is helpful when
         the result can be passed to requests library's Create Session
         keyword's optional cookies parameter.
-        
+
         The `` as_dict`` argument is new in SeleniumLibrary 3.3
         """
         if is_falsy(as_dict):
@@ -67,14 +67,6 @@ class CookieKeywords(LibraryComponent):
             return pairs
 
     @keyword
-    def get_cookie_value(self, name):
-        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Get Cookie` instead."""
-        cookie = self.driver.get_cookie(name)
-        if cookie is not None:
-            return cookie['value']
-        raise ValueError("Cookie with name %s not found." % name)
-
-    @keyword
     def get_cookie(self, name):
         """Returns information of cookie with ``name`` as an object.
 
@@ -86,9 +78,9 @@ class CookieKeywords(LibraryComponent):
         | name          | The name of a cookie.                                      |
         | value         | Value of the cookie.                                       |
         | path          | Indicates a URL path, for example ``/``.                   |
-        | domain        | The domain the cookie is visible to.                       |
-        | secure        | When true, cookie is only used with HTTPS connections.     |
-        | httpOnly      | When true, cookie is not accessible via JavaScript.        |
+        | domain        | The domain, the cookie is visible to.                      |
+        | secure        | When true, the cookie is only used with HTTPS connections. |
+        | httpOnly      | When true, the cookie is not accessible via JavaScript.    |
         | expiry        | Python datetime object indicating when the cookie expires. |
         | extra         | Possible attributes outside of the WebDriver specification |
 
@@ -99,10 +91,10 @@ class CookieKeywords(LibraryComponent):
         [https://docs.python.org/3/library/datetime.html#datetime.datetime|datetime object],
         not as seconds since Unix Epoch like WebDriver natively does.
 
-        In some cases, example when running browser in the cloud, it is possible that
-        cookie contains other attributes than is defined in the
+        In some cases, example when running a browser in the cloud, it is possible that
+        the cookie contains other attributes than is defined in the
         [https://w3c.github.io/webdriver/#cookies|WebDriver specification].
-        These other attributes are available in a ``extra`` attribute in the cookie
+        These other attributes are available in an ``extra`` attribute in the cookie
         object and it contains a dictionary of the other attributes. The ``extra``
         attribute is new in SeleniumLibrary 4.0.
 
@@ -128,7 +120,7 @@ class CookieKeywords(LibraryComponent):
         ``name`` and ``value`` are required, ``path``, ``domain``, ``secure``
         and ``expiry`` are optional.  Expiry supports the same formats as
         the [http://robotframework.org/robotframework/latest/libraries/DateTime.html|DateTime]
-        library or an epoch time stamp.
+        library or an epoch timestamp.
 
         Example:
         | `Add Cookie` | foo | bar |                            |

@@ -17,6 +17,7 @@
 from robot.api import logger
 from robot.utils import NormalizedDict
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.support.event_firing_webdriver import EventFiringWebElement
 
 from SeleniumLibrary.base import ContextAware
 from SeleniumLibrary.errors import ElementNotFound
@@ -39,8 +40,8 @@ class ElementFinder(ContextAware):
             'partial link': self._find_by_partial_link_text,
             'css': self._find_by_css_selector,
             'class': self._find_by_class_name,
-            'jquery': self._find_by_sizzle_selector,
-            'sizzle': self._find_by_sizzle_selector,
+            'jquery': self._find_by_jquery_selector,
+            'sizzle': self._find_by_jquery_selector,
             'tag': self._find_by_tag_name,
             'scLocator': self._find_by_sc_locator,
             'default': self._find_by_default
@@ -102,7 +103,7 @@ class ElementFinder(ContextAware):
 
     def _is_webelement(self, element):
         # Hook for unit tests
-        return isinstance(element, WebElement)
+        return isinstance(element, (WebElement, EventFiringWebElement))
 
     def _disallow_webelement_parent(self, element):
         if self._is_webelement(element):
@@ -134,7 +135,7 @@ class ElementFinder(ContextAware):
             result = [result]
         return self._filter_elements(result, tag, constraints)
 
-    def _find_by_sizzle_selector(self, criteria, tag, constraints, parent):
+    def _find_by_jquery_selector(self, criteria, tag, constraints, parent):
         self._disallow_webelement_parent(parent)
         js = "return jQuery('%s').get();" % criteria.replace("'", "\\'")
         return self._filter_elements(
@@ -239,7 +240,7 @@ class ElementFinder(ContextAware):
         if index != -1:
             prefix = locator[:index].strip()
             if prefix in self._strategies:
-                return prefix, locator[index+1:].lstrip()
+                return prefix, locator[index + 1:].lstrip()
         return 'default', locator
 
     def _get_locator_separator_index(self, locator):

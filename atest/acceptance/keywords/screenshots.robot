@@ -6,6 +6,7 @@ Force Tags        Known Issue Internet Explorer
 
 *** Test Cases ***
 Capture page screenshot to default location
+    [Tags]    NoGrid
     [Documentation]
     ...    LOG 2:4 </td></tr><tr><td colspan="3"><a href="selenium-screenshot-1.png"><img src="selenium-screenshot-1.png" width="800px"></a>
     ...    LOG 8:4 </td></tr><tr><td colspan="3"><a href="selenium-screenshot-2.png"><img src="selenium-screenshot-2.png" width="800px"></a>
@@ -52,12 +53,12 @@ Set Screenshot Directory set back to previous value
 Capture page screenshot with unique index
     [Setup]    Remove Directory    ${OUTPUTDIR}/screenshot-and-index    recursive
     ${file1} =    Capture Page Screenshot    ${OUTPUTDIR}/screenshot-and-index/other-{index}-name.png
-    ${file2} =    Capture Page Screenshot    ${OUTPUTDIR}/screenshot-and-index/some-other-name-{index}.png
+    ${file2} =    Capture Page Screenshot    ${OUTPUTDIR}/screenshot-and-index/some-{other}-name-{index}.png
     ${file3} =    Capture Page Screenshot    ${OUTPUTDIR}/screenshot-and-index/other-{index}-name.png
     File Should Exist    ${OUTPUTDIR}/screenshot-and-index/other-1-name.png
     Should Be Equal    ${file1}    ${OUTPUTDIR}${/}screenshot-and-index${/}other-1-name.png
-    File Should Exist    ${OUTPUTDIR}/screenshot-and-index/some-other-name-1.png
-    Should Be Equal    ${file2}    ${OUTPUTDIR}${/}screenshot-and-index${/}some-other-name-1.png
+    File Should Exist    ${OUTPUTDIR}/screenshot-and-index/some-{other}-name-1.png
+    Should Be Equal    ${file2}    ${OUTPUTDIR}${/}screenshot-and-index${/}some-{other}-name-1.png
     File Should Exist    ${OUTPUTDIR}/screenshot-and-index/other-2-name.png
     Should Be Equal    ${file3}    ${OUTPUTDIR}${/}screenshot-and-index${/}other-2-name.png
 
@@ -84,7 +85,7 @@ Capture page screenshot computed name is unique
     ...  Remove files  ${OUTPUTDIR}/unique-screenshot-*.png
     ...  AND  Touch    ${OUTPUTDIR}/unique-screenshot-1.png
     ...  AND  Touch    ${OUTPUTDIR}/unique-screenshot-2.png
-    ...  # unique-screenshot-3 is purposely left out
+    # unique-screenshot-3 is purposely left out
     ...  AND  Touch    ${OUTPUTDIR}/unique-screenshot-4.png
     # we expect this to be screenshot 3
     ${expected}=    Normalize Path    ${OUTPUTDIR}/unique-screenshot-3.png
@@ -104,7 +105,7 @@ Capture page screenshot advanced formatting name is unique
     ...  Remove files  ${OUTPUTDIR}/advanced-screenshot-*.png
     ...  AND  Touch    ${OUTPUTDIR}/advanced-screenshot-002.png
     ...  AND  Touch    ${OUTPUTDIR}/advanced-screenshot-003.png
-    ...  # advanced-screenshot-4 is purposely left out
+    # advanced-screenshot-4 is purposely left out
     ...  AND  Touch    ${OUTPUTDIR}/advanced-screenshot-005.png
     # this should be screenshot 1, since it doesn't exist
     ${expected}=    Normalize Path    ${OUTPUTDIR}/advanced-screenshot-001.png

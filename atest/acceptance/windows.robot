@@ -76,16 +76,23 @@ Set Window Size using strings
     Should Be Equal    ${height}    ${800}
 
 Get and Set Inner Window Size
-    Set Inner Window Size    ${800}    ${600}
-    ${width}    ${height}=    Get Inner Window Size
+    Set Window Size    ${800}    ${600}    ${True}
+    ${width}    ${height}=    Get Window Size    ${True}
     Should Be Equal    ${width}    ${800}
     Should Be Equal    ${height}    ${600}
 
 Set Inner Window Size using strings
-    Set Inner Window Size    800    600
-    ${width}    ${height}=    Get Inner Window Size
+    Set Window Size    800    600    ${True}
+    ${width}    ${height}=    Get Window Size    ${True}
     Should Be Equal    ${width}    ${800}
     Should Be Equal    ${height}    ${600}
+
+Get and Set Inner Window Size with Frames
+    Go To Page "frames/frameset.html"
+    Select Frame            left
+    Run Keyword And Expect Error
+    ...    Keyword failed setting correct window size.
+    ...    Set Window Size         ${400}    ${300}    ${True}
 
 Get and Set Window Position
     [Tags]  Known Issue Chrome    Known Issue Safari
@@ -149,7 +156,7 @@ Select Window With Delay By Title And Window Not Found
 Select Popup Window By Excluded List
     [Tags]    Known Issue Internet Explorer
     Cannot Be Executed in IE
-    @{excluded_handle_list}=    List Windows
+    @{excluded_handle_list}=    Get Window Handles
     Click Link    my popup
     ${parent}=    Select Window    ${excluded_handle_list}    timeout=5
     Title Should Be    Original
@@ -159,7 +166,7 @@ Select Popup Window By Excluded List
 
 Select Popup Window With Delay By Excluded List
     [Tags]    Known Issue Internet Explorer
-    @{excluded_handle_list}=    List Windows
+    @{excluded_handle_list}=    Get Window Handles
     Click Button     id:MyButton
     Select Window    ${excluded_handle_list}    timeout=5
     Title Should Be    Original

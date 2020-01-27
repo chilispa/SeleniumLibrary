@@ -53,10 +53,10 @@ class JavaScriptKeywords(LibraryComponent):
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_remote/selenium.webdriver.remote.webdriver.html#selenium.webdriver.remote.webdriver.WebDriver.execute_script|
         arguments] as part of ``code`` argument. The JavaScript code and
         arguments must be separated with `JAVASCRIPT` and `ARGUMENTS` markers
-        and must used exactly with this format. If the Javascript code is
+        and must be used exactly with this format. If the Javascript code is
         first, then the `JAVASCRIPT` marker is optional. The order of
-        `JAVASCRIPT` and `ARGUMENTS` markers can swapped, but if `ARGUMENTS`
-        is first marker, then `JAVASCRIPT` marker is mandatory. It is only
+        `JAVASCRIPT` and `ARGUMENTS` markers can be swapped, but if `ARGUMENTS`
+        is the first marker, then `JAVASCRIPT` marker is mandatory. It is only
         allowed to use `JAVASCRIPT` and `ARGUMENTS` markers only one time in the
         ``code`` argument.
 
@@ -115,7 +115,7 @@ class JavaScriptKeywords(LibraryComponent):
             raise ValueError('JavaScript code was not found from code argument.')
         js_code = ''.join(js_code)
         path = js_code.replace('/', os.sep)
-        if os.path.isfile(path):
+        if os.path.isabs(path) and os.path.isfile(path):
             js_code = self._read_javascript_from_file(path)
         return js_code, js_args
 

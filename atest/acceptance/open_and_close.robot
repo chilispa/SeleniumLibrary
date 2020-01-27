@@ -1,14 +1,11 @@
 *** Settings ***
 Suite Teardown    Close All Browsers
 Resource          resource.robot
+Library           ../resources/testlibs/cache_error.py
 
 *** Test Cases ***
 Browser Should Open And Close
     Open Browser To Start Page Without Testing Default Options
-    Close Browser
-
-Browser Open With Implicit Wait Should Not Override Default
-    Open Browser To Start Page And Test Implicit Wait    10
     Close Browser
 
 There Should Be A Good Error Message If Browser Is Not Opened
@@ -38,10 +35,9 @@ Switch to closed browser is possible
     Close Browser
     Switch Browser    Browser 3
     Page Should Contain    Name:
-    Switch Browser    Browser 2
     Run Keyword And Expect Error
-    ...    *
-    ...    Page Should Contain    Name:
+    ...    No browser with index or alias 'Browser 2' found.
+    ...    Switch Browser    Browser 2
     Close All Browsers
 
 Closing all browsers clears cache
@@ -81,3 +77,14 @@ Open Browser desired_capabilities As Dictionary
     ${caps}    Create Dictionary    foo=${True}
     Open Browser    ${ROOT}/forms/prefilled_email_form.html    ${BROWSER}
      ...    remote_url=${REMOTE_URL}    desired_capabilities=${caps}
+
+When Closing Browsers Causes An Error
+    [Tags]    NoGrid
+    [Documentation]
+    ...    FAIL       AttributeError: 'NoneType' object has no attribute 'quit'
+    ...    LOG 3:8    ERROR When closing browser, received exception: 'NoneType' object has no attribute 'quit'
+    ...    LOG 3:9    ERROR When closing browser, received exception: 'NoneType' object has no attribute 'quit'
+    Open Browser    ${ROOT}/forms/prefilled_email_form.html    ${BROWSER}    Browser 1
+    ...    remote_url=${REMOTE_URL}    desired_capabilities=${DESIRED_CAPABILITIES}
+    Invalidate Driver
+    Close All Browsers

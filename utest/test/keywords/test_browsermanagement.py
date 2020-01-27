@@ -1,10 +1,10 @@
 import unittest
 
-from mockito import when, mock, verify, verifyNoMoreInteractions, unstub
+from mockito import when, mock, verify, verifyNoMoreInteractions, unstub, ANY
 from selenium import webdriver
 
 from SeleniumLibrary.keywords import BrowserManagementKeywords
-from SeleniumLibrary.utils import SELENIUM_VERSION
+from SeleniumLibrary import SeleniumLibrary
 
 
 class BrowserManagementTests(unittest.TestCase):
@@ -26,6 +26,33 @@ class BrowserManagementTests(unittest.TestCase):
         verifyNoMoreInteractions(second_browser)
         unstub()
 
+    def test_selenium_implicit_wait_default(self):
+        sl = SeleniumLibrary()
+        self.assertEqual(sl.implicit_wait, 0.0)
+
+    def test_set_selenium_implicit_wait(self):
+        sl = SeleniumLibrary()
+        sl.set_selenium_implicit_wait('5.0')
+        self.assertEqual(sl.implicit_wait, 5.0)
+
+        sl.set_selenium_implicit_wait('1 min')
+        self.assertEqual(sl.implicit_wait, 60.0)
+
+    def test_selenium_implicit_wait_error(self):
+        with self.assertRaises(ValueError):
+            SeleniumLibrary(implicit_wait='False')
+        sl = SeleniumLibrary(implicit_wait='3')
+        with self.assertRaises(ValueError):
+            sl.set_selenium_implicit_wait('1 vuosi')
+
+    def test_selenium_implicit_wait_get(self):
+        sl = SeleniumLibrary(implicit_wait='3')
+        self.assertEqual(sl.get_selenium_implicit_wait(), '3 seconds')
+
+        org_value = sl.set_selenium_implicit_wait('1 min')
+        self.assertEqual(sl.get_selenium_implicit_wait(), '1 minute')
+        self.assertEqual(org_value, '3 seconds')
+
     def test_bad_browser_name(self):
         ctx = mock()
         bm = BrowserManagementKeywords(ctx)
@@ -33,10 +60,11 @@ class BrowserManagementTests(unittest.TestCase):
             bm._make_driver("fireox")
             self.fail("Exception not raised")
         except ValueError as e:
-            self.assertEquals(str(e), "fireox is not a supported browser.")
+            assert str(e) == "fireox is not a supported browser."
 
     def test_create_webdriver(self):
         ctx = mock()
+        ctx.event_firing_webdriver = None
         bm = BrowserManagementKeywords(ctx)
         FakeWebDriver = mock()
         driver = mock()
@@ -57,20 +85,28 @@ class BrowserManagementTests(unittest.TestCase):
 
     def test_open_browser_speed(self):
         ctx = mock()
+        ctx._drivers = mock()
+        ctx.event_firing_webdriver = None
         ctx.speed = 5.0
         browser = mock()
-        when(webdriver).Chrome(options=None).thenReturn(browser)
+        executable_path = 'chromedriver'
+        when(webdriver).Chrome(options=None, service_log_path=None, executable_path=executable_path).thenReturn(browser)
         bm = BrowserManagementKeywords(ctx)
+        when(bm._webdriver_creator)._get_executable_path(ANY).thenReturn(executable_path)
         bm.open_browser('http://robotframework.org/', 'chrome')
         self.assertEqual(browser._speed, 5.0)
         unstub()
 
     def test_create_webdriver_speed(self):
         ctx = mock()
+        ctx._drivers = mock()
+        ctx.event_firing_webdriver = None
         ctx.speed = 0.0
         browser = mock()
-        when(webdriver).Chrome(options=None).thenReturn(browser)
+        executable_path = 'chromedriver'
+        when(webdriver).Chrome(options=None, service_log_path=None, executable_path=executable_path).thenReturn(browser)
         bm = BrowserManagementKeywords(ctx)
+        when(bm._webdriver_creator)._get_executable_path(ANY).thenReturn(executable_path)
         bm.open_browser('http://robotframework.org/', 'chrome')
         verify(browser, times=0).__call__('_speed')
         unstub()

@@ -5,16 +5,20 @@ Resource          ../resource.robot
 Library           String
 
 *** Test Cases ***
-Get Elements
+Get Many Elements
     @{links}=    Get WebElements    //div[@id="div_id"]/a
     Length Should Be    ${links}    12
+
+Get Zero Elements
     ${no_elements} =     Get WebElements    id:non_existing_elem
     Should Be Empty    ${no_elements}
 
 Get Web Element
     @{links}=    Get WebElements    //div[@id="div_id"]/a
     ${link}=    Get WebElement    //div[@id="div_id"]/a
-    Should Be Equal    @{links}[0]    ${link}
+    Should Be Equal    ${links}[0]    ${link}
+
+Get Web Element Should Fail If Element Is Not Found
     Run Keyword and Expect Error
     ...    Element with locator 'id=non_existing_elem' not found.
     ...    Get WebElement    id=non_existing_elem
@@ -23,14 +27,18 @@ More Get Elements
     [Setup]    Go To Page "forms/prefilled_email_form.html"
     @{checkboxes}=    Get WebElements    //input[@type="checkbox"]
     Length Should Be    ${checkboxes}    2
-    : FOR    ${checkbox}    IN    @{checkboxes}
-    \    Unselect Checkbox    ${checkbox}
-    : FOR    ${checkbox}    IN    @{checkboxes}
-    \    Checkbox Should Not Be Selected    ${checkbox}
-    : FOR    ${checkbox}    IN    @{checkboxes}
-    \    Select Checkbox    ${checkbox}
-    : FOR    ${checkbox}    IN    @{checkboxes}
-    \    Checkbox Should Be Selected    ${checkbox}
+    FOR    ${checkbox}    IN    @{checkboxes}
+        Unselect Checkbox    ${checkbox}
+    END
+    FOR    ${checkbox}    IN    @{checkboxes}
+        Checkbox Should Not Be Selected    ${checkbox}
+    END
+    FOR    ${checkbox}    IN    @{checkboxes}
+        Select Checkbox    ${checkbox}
+    END
+    FOR    ${checkbox}    IN    @{checkboxes}
+        Checkbox Should Be Selected    ${checkbox}
+    END
 
 Assign Id To Element
     Page Should Not Contain Element    my id
