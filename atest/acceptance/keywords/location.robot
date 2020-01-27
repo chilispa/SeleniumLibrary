@@ -88,12 +88,48 @@ Wait Until Location Is Fails With Timeout
     ...     my_message
     ...     Wait Until Location Is     not_here   timeout=0.1     message=my_message
 
+
+
+
 Wait Until Location Is Not
     [Setup]    Go To Page "javascript/wait_location.html"
     Click Element   button
     Wait Until Location Is Not     http://localhost:7000/html/notMe
 
+Wait Until Location Is Not Fail
+    [Setup]    Go To Page "javascript/wait_location.html"
+    ${orig_timeout}=    Set Selenium Timeout    2 s
+    Run Keyword And Expect Error
+    ...     Location is 'http://localhost:7000/html/javascript/wait_location.html' in 2 seconds.
+    ...     Wait Until Location Is Not  http://localhost:7000/html/javascript/wait_location.html
+    Set Selenium Timeout    ${orig_timeout}
+
+Wait Until Location Is Not Fails With Timeout
+    [Setup]    Go To Page "javascript/wait_location.html"
+    Click Element   button
+    Run Keyword And Expect Error
+    ...     Location is 'http://localhost:7000/html/javascript/wait_location.html' in 1 second.
+    ...     Wait Until Location Is Not     http://localhost:7000/html/javascript/wait_location.html   timeout=1 s
+    Set Selenium Timeout    ${orig_timeout}
+
+Wait Until Location Is Not Fails With Message
+    [Setup]    Go To Page "javascript/wait_location.html"
+    Click Element   button
+    Run Keyword And Expect Error
+    ...     my_message
+    ...     Wait Until Location Is Not     http://localhost:7000/html/javascript/wait_location.html   timeout=1 s  message=my_message
+
+
+
 Wait Until Location Does Not Contain
     [Setup]    Go To Page "javascript/wait_location.html"
     Click Element   button
     Wait Until Location Does Not Contain     not_contained
+
+Wait Until Location Does Not Contain Fail
+    [Setup]    Go To Page "javascript/wait_location.html"
+    ${orig_timeout}=    Set Selenium Timeout    2 s
+    run keyword and expect error
+    ...    Location did contain 'wait_location.html' in 2 seconds.
+    ...    Wait Until Location Does Not Contain      wait_location.html
+    Set Selenium Timeout    ${orig_timeout}
